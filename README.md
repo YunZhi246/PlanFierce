@@ -2,7 +2,21 @@
 
 ## Backend Development
 
-### General Steps:
+### GraphQL Steps:
+GraphQL playground at http://127.0.0.1:8000/graphql  
+You will need to make some data in the Django admin  
+Sample query
+```
+query {
+  allVideos {
+    id
+    title
+    duration
+  }
+}
+```
+
+### Setup Steps:
 1. Make database
 1. Create virtual environment
 1. Install pip requirements
@@ -11,7 +25,7 @@
 1. Run server
 1. Setup PyCharm
 
-### Make database
+#### Make database
 Check if postgres client exists  
 `pg_config`  
 Inside PSQL:
@@ -26,7 +40,7 @@ To check if database is created:
 \dt
 ```
 
-### Create virtual environment
+#### Create virtual environment
 Inside `backend` folder:
 ```
 python -m pip install virtualenv
@@ -37,13 +51,13 @@ To activate (on Windows): `.\venv\Scripts\activate`
 To activate (on Mac): `source venv/bin/activate`  
 Deactivate: `deactivate`
 
-### Install pip requirements
+#### Install pip requirements
 Inside `backend` folder
 ```
 python -m pip install -r requirements.txt
 ```
 
-### Run Django migration
+#### Run Django migration
 You want to do this everytime there is a model change.  
 Inside `backend/planfierce`
 ```
@@ -52,20 +66,21 @@ python manage.py migrate
 ```
 If you run `\dt` in PSQL, you should see tables created.
 
-### Create project superuser
+#### Create project superuser
 ```
 python manage.py createsuperuser
 ```
 Remember the username and password for access to admin!
 
-### Run server
+#### Run server
 Will run at http://127.0.0.1:8000/  
-Admin panel at http://127.0.0.1:8000/admin
+Admin panel at http://127.0.0.1:8000/admin  
+Play with GraphQL at http://127.0.0.1:8000/graphql 
 ```
 python manage.py runserver
 ```
 
-### Setup PyCharm
+#### Setup PyCharm
 Open Project --> folder `backend/planfierce`  
 To link to your virtual environemnt:
 1. Go into Settings --> Project: Planfierce --> Project Interpreter
