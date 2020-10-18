@@ -72,8 +72,21 @@ class CreateWorkoutMutation(graphene.Mutation):
         return CreateWorkoutMutation(workout=workout)
 
 
+class DeleteWorkoutMutation(graphene.Mutation):
+    class Arguments:
+        workout_id = graphene.ID(required=True)
+
+    info = graphene.Field(graphene.String)
+
+    def mutate(self, info, workout_id):
+        series = WorkoutSeries.objects.get(id=workout_id)
+        info = str(series.delete())
+        return DeleteWorkoutMutation(info=info)
+
+
 class Mutation(graphene.ObjectType):
     create_workout = CreateWorkoutMutation.Field()
+    delete_workout = DeleteWorkoutMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

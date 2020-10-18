@@ -13,3 +13,9 @@ mutation {
     }
   }
 }
+
+mutation {
+  deleteWorkout(workoutId: 5){
+    info
+  }
+}
