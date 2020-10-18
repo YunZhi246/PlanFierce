@@ -3,18 +3,10 @@
 ## Backend Development
 
 ### GraphQL Steps:
+Load data with `python manage.py loaddata workouts`  
 GraphQL playground at http://127.0.0.1:8000/graphql  
-You will need to make some data in the Django admin  
-Sample query
-```
-query {
-  allVideos {
-    id
-    title
-    duration
-  }
-}
-```
+Sample queries in [queries.txt](backend/queries.txt)
+
 
 ### Setup Steps:
 1. Make database
