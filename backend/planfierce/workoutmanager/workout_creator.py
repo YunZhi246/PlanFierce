@@ -25,6 +25,7 @@ class WorkoutCreator:
         self.cooldown_durations = cooldown_durations
         self.types = types
         self.youtubers = youtubers
+        self.end_time = self.__create_end_time()
         # TODO: actually use start and end date (aka remove following lines)
         self.start_date = date.today()
         self.end_date = date.today() + timedelta(days=7)
@@ -50,6 +51,21 @@ class WorkoutCreator:
             d.save()
         return workout
 
+    def __create_end_time(self):
+        total = 0
+        for t in self.warmup_durations:
+            total += t
+        for t in self.workout_durations:
+            total += t
+        for t in self.warmup_durations:
+            total += t
+
+        units = total // 15
+        if total % 15 > 0:
+            units += 1
+        total = units * 15
+        return self.start_time + timedelta(minutes=total)
+
     def __create_days(self, workout):
         int_days = {}
         for d in self.days_of_week:
@@ -64,8 +80,7 @@ class WorkoutCreator:
                 day.workout_series = workout
                 day.date = date_counter
                 day.start_time = self.start_time
-                # TODO: remove this
-                day.end_time = self.start_time
+                day.end_time = self.end_time
                 workout_days.append(day)
             date_counter += timedelta(days=1)
         return workout_days
