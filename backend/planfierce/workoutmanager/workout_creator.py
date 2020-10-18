@@ -1,5 +1,6 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from .models import WorkoutVideo, WorkoutSeries, WorkoutDay
+from .youtube_search import SearchParameter
 
 
 class WorkoutCreator:
@@ -64,7 +65,9 @@ class WorkoutCreator:
         if total % 15 > 0:
             units += 1
         total = units * 15
-        return self.start_time + timedelta(minutes=total)
+        end = datetime(1, 1, 1, self.start_time.hour, self.start_time.minute, 0)
+        end += timedelta(minutes=total)
+        return end.time()
 
     def __create_days(self, workout):
         int_days = {}
@@ -84,3 +87,6 @@ class WorkoutCreator:
                 workout_days.append(day)
             date_counter += timedelta(days=1)
         return workout_days
+
+    def __process_searches(self):
+        pass
