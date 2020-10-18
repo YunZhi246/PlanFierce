@@ -55,8 +55,11 @@ class YoutubeQuery:
 
     # searchParameters [list of SearchParameter]
     def runYoutubeSearchQueries(self, searchParameters):
+        results = []
         for sp in searchParameters:
-            self.runYoutubeSearchQuery(sp)
+            result = self.runYoutubeSearchQuery(sp)
+            results.append(result)
+        return results
 
     # searchParameter [SearchParameter]
     def runYoutubeSearchQuery(self, searchParameter):
