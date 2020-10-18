@@ -7,7 +7,8 @@ class CalendarAdmin:
     api_service_name = "calendar"
     api_version = "v3"
     access_file = 'workoutmanager/access.txt'
-    url_root = "www.planfierce.com/videos/"
+    # url_root = "www.planfierce.com/videos/"
+    url_root = "http://localhost:3000/videos/"
     timezone = "America/New_York"
 
     def update_calendar(self, workout):

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import injectSheet from 'react-jss';
 import '../index.css';
 import { Redirect } from 'react-router-dom'
+import { GetDayById } from '../Days.js';
 
 import headerImage from '../Images/headerImage.jpg';
 
@@ -28,45 +29,6 @@ const VideoPage = ({
       return {__html: iframeVideo}
   }
 
-  const warmup = [
-    {
-        "id": "1",
-        "url": "https://www.youtube.com/watch?v=VKIiCOZ2Eo4",
-        "title": "Test Video"
-    },
-    {
-        "id": "2",
-        "url": "https://www.youtube.com/watch?v=VKIiCOZ2Eo4",
-        "title": "Test Video2"
-    }
-  ];
-
-  const workout = [
-    {
-        "id": "1",
-        "url": "https://www.youtube.com/watch?v=VKIiCOZ2Eo4",
-        "title": "Test Video"
-    },
-    {
-        "id": "2",
-        "url": "https://www.youtube.com/watch?v=VKIiCOZ2Eo4",
-        "title": "Test Video2"
-    }
-  ];
-
-  const cooldown = [
-    {
-        "id": "1",
-        "url": "https://www.youtube.com/watch?v=VKIiCOZ2Eo4",
-        "title": "Test Video"
-    },
-    {
-        "id": "2",
-        "url": "https://www.youtube.com/watch?v=VKIiCOZ2Eo4",
-        "title": "Test Video2"
-    }
-  ];
-
   const createIFrameVideos = (videos) => {
     const prefix = 'https://www.youtube.com/embed/';
     return (
@@ -80,15 +42,11 @@ const VideoPage = ({
   }
 
   return (
-    <div className={classes.mainContainer}>
-      <img src={headerImage} className={classes.imageHeader}/>
-      {warmup.length && <h1>WARM UP</h1>}
-      {warmup.length && createIFrameVideos(warmup)}
-      {workout.length && <h1>Work out</h1>}
-      {workout.length && createIFrameVideos(workout)}
-      {cooldown.length && <h1>Cool down</h1>}
-      {cooldown.length && createIFrameVideos(cooldown)}
-    </div>
+    <GetDayById
+      dayId={129}
+      classes={classes}
+      headerImage={headerImage}
+    />
   );
 }
 export default injectSheet(STYLES)
