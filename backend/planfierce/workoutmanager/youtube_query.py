@@ -3,12 +3,14 @@ import os
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+from google.oauth2 import service_account
 
 import json
 from youtube_search import SearchParameter, Result, Video, VideoDuration
 import isodate
 
-scopes = ["https://www.googleapis.com/auth/youtube.force-ssl", "https://www.googleapis.com/auth/youtube.readonly"]
+scopes = ["https://www.googleapis.com/auth/sqlservice.admin", "https://www.googleapis.com/auth/youtube.force-ssl", "https://www.googleapis.com/auth/youtube.readonly"]
+service_account_file = 'service.json'
 
 class YoutubeQuery:
 
@@ -27,11 +29,9 @@ class YoutubeQuery:
 
         api_service_name = "youtube"
         api_version = "v3"
-        client_secrets_file = "client_secret.json"
 
         # Get credentials and create an API client
-        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(client_secrets_file, scopes)
-        credentials = flow.run_console()
+        credentials = service_account.Credentials.from_service_account_file(service_account_file, scopes=scopes)
         youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=credentials)
 
         request = youtube.videos().list(
@@ -80,11 +80,9 @@ class YoutubeQuery:
 
         api_service_name = "youtube"
         api_version = "v3"
-        client_secrets_file = "client_secret.json"
 
         # Get credentials and create an API client
-        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(client_secrets_file, scopes)
-        credentials = flow.run_console()
+        credentials = service_account.Credentials.from_service_account_file(service_account_file, scopes=scopes)
         youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=credentials)
 
         request = youtube.search().list(
@@ -125,8 +123,6 @@ class YoutubeQuery:
                     v.duration = vd.duration
 
         result = Result(searchParameter, videos)
-        
-        # TODO: automate authentication
 
         return result
 
