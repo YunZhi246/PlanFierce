@@ -6,7 +6,7 @@ from .models import WorkoutVideo, WorkoutSeries, WorkoutDay
 class WorkoutVideoType(DjangoObjectType):
     class Meta:
         model = WorkoutVideo
-        fields = ("id", "title", "url", "youtuber", "release_date")
+        fields = "__all__"
 
     duration = graphene.String()
 
@@ -17,20 +17,28 @@ class WorkoutVideoType(DjangoObjectType):
 class WorkoutSeriesType(DjangoObjectType):
     class Meta:
         model = WorkoutSeries
-        fields = ("id", "name", "start_date", "end_date")
+        fields = "__all__"
 
 
 class WorkoutDayType(DjangoObjectType):
     class Meta:
         model = WorkoutDay
-        fields = ("id", "date", "start_time", "end_time", "shared_with", "workout_series", "videos")
+        fields = "__all__"
 
 
 class Query(graphene.ObjectType):
     all_videos = graphene.List(WorkoutVideoType)
+    all_days = graphene.List(WorkoutDayType)
+    all_series = graphene.List(WorkoutSeriesType)
 
     def resolve_all_videos(root, info):
         return WorkoutVideo.objects.all()
+
+    def resolve_all_days(root, info):
+        return WorkoutDay.objects.all()
+
+    def resolve_all_series(root, info):
+        return WorkoutSeries.objects.all()
 
 
 schema = graphene.Schema(query=Query)

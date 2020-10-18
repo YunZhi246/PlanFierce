@@ -25,7 +25,7 @@ class WorkoutDay(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
-    shared_with = models.TextField()
+    shared_with = models.TextField(blank=True)
     workout_series = models.ForeignKey(WorkoutSeries, related_name="days", on_delete=models.CASCADE)
     videos = models.ManyToManyField(WorkoutVideo)
 

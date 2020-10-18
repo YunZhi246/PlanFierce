@@ -1,0 +1,47 @@
+query {
+  allVideos {
+    id
+    title
+    duration
+    youtuber
+    releaseDate
+  }
+}
+
+query {
+  allDays {
+    id
+    date
+    startTime
+    endTime
+    sharedWith
+    workoutSeries {
+      id
+      name
+    }
+    videos {
+      id
+      url
+    }
+  }
+}
+
+query {
+  allSeries {
+    id
+    name
+    startDate
+    endDate
+    days {
+      id
+      date
+      startTime
+      endTime
+      videos {
+        id
+        url
+      }
+    }
+  }
+}
+
