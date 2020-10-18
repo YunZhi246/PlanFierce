@@ -134,3 +134,5 @@ dmypy.json
 frontend/yarn.lock
 frontend/package.json
 frontend/package-lock.json
+
+backend/planfierce/workoutmanager/access.txt
