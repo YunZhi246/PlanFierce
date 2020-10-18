@@ -41,7 +41,7 @@ class CalendarAdmin:
 
     def __create_url(self, day):
         date = day.date.strftime("%d%m%Y")
-        url = "{}date={}&id={}".format(self.url_root, date, day.id)
+        url = "{}date={}/id={}".format(self.url_root, date, day.id)
         return url
 
     def __read_token(self):
