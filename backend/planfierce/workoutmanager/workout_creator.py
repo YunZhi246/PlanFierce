@@ -27,9 +27,6 @@ class WorkoutCreator:
         self.types = types
         self.youtubers = youtubers
         self.end_time = self.__create_end_time()
-        # TODO: actually use start and end date (aka remove following lines)
-        self.start_date = date.today()
-        self.end_date = date.today() + timedelta(days=7)
 
     def create_workout(self):
         workout = WorkoutSeries()
