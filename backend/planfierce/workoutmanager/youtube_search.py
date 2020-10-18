@@ -23,3 +23,16 @@ class Result:
     def __init__(self, sp, videos):
         self.search_parameters = sp
         self.videos = videos
+
+class Video:
+    def __init__(self, title, youtuber, duration, url, youtube_id):
+        self.title = title
+        self.youtuber = youtuber
+        self.duration = duration
+        self.url = url
+        self.youtube_id = youtube_id
+
+class VideoDuration:
+    def __init__(self, video_id, duration):
+        self.video_id = video_id
+        self.duration = duration
