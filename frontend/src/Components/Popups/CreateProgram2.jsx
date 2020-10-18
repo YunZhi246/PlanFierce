@@ -118,10 +118,9 @@ const workoutTypesList = [
     'HIIT',
 ];
 
-const CreateProgram2 = ({
-    classes,
-    toggle,
-}) => {
+const CreateProgram2 = (props) => {
+  const classes = props.classes
+  const toggle = props.toggle
   const [workoutTypes, setWorkoutTypes] = useState([]);
   const [youtubers, setYoutubers] = useState([]);
 
@@ -177,6 +176,15 @@ const CreateProgram2 = ({
             <div className={classes.footer}>
                 <CreateWorkout
                     class={classes.footerButton}
+                    name={props.name}
+                    startDate={props.startDate}
+                    endDate={props.endDate}
+                    startTime={props.startTime}
+                    daysOfWeek={props.daysOfWeek}
+                    workoutStruct={props.workoutStruct}
+                    workoutTimes={props.workoutTimes}
+                    types={workoutTypes}
+                    youtubers={youtubers}
                 />
             </div>
         </div>

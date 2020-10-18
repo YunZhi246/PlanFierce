@@ -304,7 +304,19 @@ const CreateProgram1 = ({
             </div>
         </div>
    </div>}
-   {isSecondModal && <CreateProgram2 toggle={toggle}/>}
+   {
+       isSecondModal && 
+       <CreateProgram2 
+            toggle={toggle}
+            name={programName}
+            startDate={startDate}
+            endDate={endDate}
+            daysOfWeek={week}
+            startTime={startTime}
+            workoutStruct={workoutStructure}
+            workoutTimes={workoutTimes}
+       />
+   }
    </>
   );
 }
