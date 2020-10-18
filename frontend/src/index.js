@@ -20,7 +20,7 @@ const routing = (
     <div>
       <Route exact path="/" component={HomePage} />
       <Route path="/calendar" component={CalendarPage} />
-      <Route path="/videos" component={VideoPage} />
+      <Route path="/videos/:data/:id" component={VideoPage} />
     </div>
   </Router>
   </ApolloProvider>
