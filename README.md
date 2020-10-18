@@ -3,9 +3,10 @@
 ## Backend Development
 
 ### GraphQL Steps:
-Load data with `python manage.py loaddata workouts`  
+Load data with `python manage.py loaddata workouts` (or just run a `createWorkout` mutation :wink:)  
 GraphQL playground at http://127.0.0.1:8000/graphql  
-Sample queries in [queries.txt](backend/queries.txt)
+Sample queries in [queries.txt](backend/queries.txt)  
+Sample mutations in [mutations.txt](backend/mutations.txt)
 
 
 ### Setup Steps:

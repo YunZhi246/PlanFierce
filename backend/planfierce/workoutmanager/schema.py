@@ -31,6 +31,8 @@ class Query(graphene.ObjectType):
     all_videos = graphene.List(WorkoutVideoType)
     all_days = graphene.List(WorkoutDayType)
     all_series = graphene.List(WorkoutSeriesType)
+    day_by_id = graphene.Field(WorkoutDayType, day_id=graphene.ID(required=True))
+    series_by_id = graphene.Field(WorkoutSeriesType, workout_id=graphene.ID(required=True))
 
     def resolve_all_videos(root, info):
         return WorkoutVideo.objects.all()
@@ -40,6 +42,18 @@ class Query(graphene.ObjectType):
 
     def resolve_all_series(root, info):
         return WorkoutSeries.objects.all()
+
+    def resolve_day_by_id(root, info, day_id):
+        try:
+            return WorkoutDay.objects.get(id=day_id)
+        except WorkoutDay.DoesNotExist:
+            return None
+
+    def resolve_series_by_id(root, info, workout_id):
+        try:
+            return WorkoutSeries.objects.get(id=workout_id)
+        except WorkoutSeries.DoesNotExist:
+            return None
 
 
 class CreateWorkoutMutation(graphene.Mutation):
@@ -72,8 +86,21 @@ class CreateWorkoutMutation(graphene.Mutation):
         return CreateWorkoutMutation(workout=workout)
 
 
+class DeleteWorkoutMutation(graphene.Mutation):
+    class Arguments:
+        workout_id = graphene.ID(required=True)
+
+    info = graphene.Field(graphene.String)
+
+    def mutate(self, info, workout_id):
+        series = WorkoutSeries.objects.get(id=workout_id)
+        info = str(series.delete())
+        return DeleteWorkoutMutation(info=info)
+
+
 class Mutation(graphene.ObjectType):
     create_workout = CreateWorkoutMutation.Field()
+    delete_workout = DeleteWorkoutMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
