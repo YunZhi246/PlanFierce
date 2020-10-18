@@ -1,5 +1,5 @@
 mutation {
-  createWorkout(name: "Hello", daysOfWeek: ["M","W","F"], startTime: "13:30", warmupDurations: [5,4], workoutDurations: [15,10], types: ["Arms", "Core"]) {
+  createWorkout(name: "Hello", startDate: "2020-10-17T04:00:00.000Z", endDate: "2020-10-24T04:00:00.000Z", daysOfWeek: [0,2,4], startTime: "13:30", warmupDurations: [5,4], workoutDurations: [15,10], types: ["Arms", "Core"]) {
     workout {
       id
       name
@@ -9,6 +9,15 @@ mutation {
         date
         startTime
         endTime
+        videos{
+          title
+        }
+        warmupVideos{
+          title
+        }
+        cooldownVideos {
+          title
+        }
       }
     }
   }

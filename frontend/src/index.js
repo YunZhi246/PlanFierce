@@ -5,10 +5,17 @@ import * as serviceWorker from './serviceWorker';
 import HomePage from './App';
 import CalendarPage from './Pages/CalendarPage';
 import VideoPage from './Pages/VideoPage';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
+
+export const client = new ApolloClient({
+  uri: 'http://127.0.0.1:8000/graphql',
+  cache: new InMemoryCache()
+});
 
 const routing = (
+  <ApolloProvider client={client}>
   <Router>
     <div>
       <Route exact path="/" component={HomePage} />
@@ -16,6 +23,7 @@ const routing = (
       <Route path="/videos" component={VideoPage} />
     </div>
   </Router>
+  </ApolloProvider>
 )
 
 ReactDOM.render(

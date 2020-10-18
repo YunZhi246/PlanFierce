@@ -4,6 +4,8 @@ import '../index.css';
 
 import headerImage from '../Images/headerImage.jpg';
 import CreateProgram1 from '../Components/Popups/CreateProgram1';
+import { ApolloProvider } from '@apollo/client';
+import { client } from '../index.js';
 
 const STYLES = {
     imageHeader: {
@@ -82,23 +84,25 @@ const CalendarPage = ({
   }
 
   return (
-    <div className={classes.mainContainer}>
-      <link href="https://fonts.googleapis.com/css2?family=Allan&display=swap" rel="stylesheet"/>
-      <img src={headerImage} className={classes.imageHeader}/>
-      <div className={classes.textContainer}>
-        <div className={classes.textBox}>
-            <div className={classes.titleText}>
-                Plan <i>FIERCE!</i>
-                <div className={classes.subTitleText}>Your calendar</div>
+    // <ApolloProvider client={client}>
+        <div className={classes.mainContainer}>
+        <link href="https://fonts.googleapis.com/css2?family=Allan&display=swap" rel="stylesheet"/>
+        <img src={headerImage} className={classes.imageHeader}/>
+        <div className={classes.textContainer}>
+            <div className={classes.textBox}>
+                <div className={classes.titleText}>
+                    Plan <i>FIERCE!</i>
+                    <div className={classes.subTitleText}>Your calendar</div>
+                </div>
+                {createProgram && <CreateProgram1 toggle={() => setProgram(!createProgram)}/>}
             </div>
-            {createProgram && <CreateProgram1 toggle={() => setProgram(!createProgram)}/>}
         </div>
-      </div>
-      <button className={classes.buttonPrimary} onClick={() => setProgram(!createProgram)}>
-        Create Now
-      </button>
-      <div dangerouslySetInnerHTML={calendar()}/>
-    </div>
+        <button className={classes.buttonPrimary} onClick={() => setProgram(!createProgram)}>
+            Create Now
+        </button>
+        <div dangerouslySetInnerHTML={calendar()}/>
+        </div>
+    // </ApolloProvider>
   );
 }
 
