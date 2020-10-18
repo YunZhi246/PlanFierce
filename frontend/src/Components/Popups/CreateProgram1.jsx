@@ -3,15 +3,11 @@ import injectSheet from 'react-jss';
 import './styles.css';
 
 import DatePicker from "react-datepicker";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
-import {Grid, TextField} from '@material-ui/core';
-import DateFnsUtils from '@date-io/date-fns';
+import { TextField, Select, MenuItem } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
+
 import ButtonWeek from '../General/ButtonWeek.jsx';
+import CreateProgram2 from './CreateProgram2';
 import "react-datepicker/dist/react-datepicker.css";
 
 const STYLES = {
@@ -20,7 +16,7 @@ const STYLES = {
         position: 'fixed',
         justifyContent:'center',
         width: '100vw',
-        height: 'calc(100vh + 100px)',
+        height: 'calc(100vh + 150px)',
     },
     modalContent: {
         backgroundColor: 'white',
@@ -73,20 +69,79 @@ const STYLES = {
         marginTop: '100px',
         marginRight: '38px',
     },
+    rowContainer3: {
+        marginTop: '150px',
+        marginRight: '38px',
+    },
+    rowContainer4: {
+        marginTop: '250px',
+        marginRight: '38px',
+        display: 'block',
+    },
     question: {
       position: 'flex',
       float: 'left',
       paddingTop: '6px',
+      display: 'block',
     },
     xButton: {
         position: 'flex',
     },
     answer: {
         float: 'right',
-    }
+        display: 'block',
+    },
+    nameAnswer: {
+        float: 'right',
+        display: 'block',
+        marginBottom: '23px',
+    },
+    workoutAnswer: {
+        float: 'right',
+        display: 'block',
+        width: '230px',
+    },
+    workoutStructure: {
+        maxHeight: '100px',
+        position: 'relative',
+        overflowY: 'scroll',
+        overflowX: 'hidden',
+        float: 'right',
+    },
+    footer: {
+        textAlign: 'center', 
+        marginTop: '53vh',
+    },
+    buttonPrimary: {
+        fontSize: '16px',
+        float: 'right',
+        //padding: '9px 15px 9px 15px',
+        backgroundColor: '#592566',
+        color: 'white',
+        border: '1px solid #592566',
+        height: '30px',
+
+    },
+    footerButton: {
+        fontSize: '18px',
+        padding: '5px 15px 5px 15px',
+        backgroundColor: '#592566',
+        color: 'white',
+        border: '1px solid #592566',
+        height: '30px',
+        justifyContent: 'center',
+
+    },
+    buttonNext: {
+        fontSize: '18px',
+        //padding: '9px 15px 9px 15px',
+        backgroundColor: '#592566',
+        color: 'white',
+        border: '1px solid white',
+        height: '50px',
+
+    },
 }
-
-
 
 const CreateProgram1 = ({
     classes,
@@ -96,12 +151,14 @@ const CreateProgram1 = ({
   const [endDate, setEndDate] = useState(new Date("2020/10/18"));
   // M, T, W, Th, F, Sat, Sun
   const [week, setWeek] = useState([false, false, false, false, false, false, false]);
-  const [selectedDate, setSelectedDate] = useState(new Date('2020-10-18T21:11:54'));
+  const [workoutStructure, setWorkoutStructure] = useState([]);
+  const [workoutTimes, setWorkoutTimes] = useState([]);
+  const [structDisplay, setStructDisplay] = useState([]);
+  const [programName, setProgramName] = useState('');
+  const [structCount, setStructCount] = useState(0);
+  const [startTime, setStartTime] = useState('9:30');
+  const [isSecondModal, setIsSecondModal] = useState(false);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-  
   const handleWeek = (day) => {
     const newWeek = week;
     newWeek[day] = !newWeek[day];
@@ -109,8 +166,56 @@ const CreateProgram1 = ({
     console.log("Week ", week);
   };
 
+  const handleStructure = (e, key) => {
+    const newStruct = workoutStructure;
+    const splitString = e.target.value.split(",");
+    const index = parseInt(splitString[0]);
+    console.log("Key string ", key);
+    newStruct[index] = splitString[1];
+    console.log("key ", index);
+    setWorkoutStructure(newStruct);
+    console.log("Workout struct ", workoutStructure);
+  };
+
+  const handleTime = (e, key) => {
+    console.log("e ", e.target);
+    const newTimes = workoutTimes;
+    newTimes[parseInt(e.target.id)] = parseInt(e.target.value);
+    setWorkoutTimes(newTimes);
+    console.log("Workout Times ", workoutTimes);
+  };
+
+  const displayWorkoutStructure = () => {
+    setStructCount(structCount + 1);
+    setWorkoutStructure([...structDisplay, 'Warmup']);
+    setWorkoutTimes([...workoutTimes, '9:30']);
+    setStructDisplay([...structDisplay, 
+    <span style={{display: 'block', paddingTop: '20px', float: 'right'}}>
+        <TextField
+            style={{width: '60px', height: '15px'}}
+            id={structCount}
+            label="mins"
+            variant="outlined"
+            onChange = {handleTime}
+        />
+        <Select
+            variant="outlined"
+            style={{marginLeft: '5px', height: '56px'}}
+            key={structCount}
+            id={structCount}
+            onChange={handleStructure}
+            >
+            <MenuItem value={structCount + ',Warmup'}>Warm Up</MenuItem>
+            <MenuItem value={structCount + ',Workout'}>Workout</MenuItem>
+            <MenuItem value={structCount + ',Cooldown'}>Cooldown</MenuItem>
+        </Select>
+    </span>]);
+    console.log("Display workout structure ", structDisplay);
+  };
+
   return (
-    <div className={classes.modal}>
+    <>
+    {!isSecondModal && <div className={classes.modal}>
         <div className={classes.modalContent}>
             <div className={classes.header}>
                 <div className={classes.stepCircle}>
@@ -151,6 +256,7 @@ const CreateProgram1 = ({
                     <span className={classes.answer}>
                         <form noValidate>
                             <TextField
+                                onChange = {(e) => setStartTime(e.target.value)}
                                 id="time"
                                 type="time"
                                 defaultValue="09:30"
@@ -165,9 +271,41 @@ const CreateProgram1 = ({
                         </form>
                     </span>
                 </div>
+                <div className={classes.rowContainer3}>
+                    <span className={classes.question}>How, and for how long, would you like to structure each workout session?</span>
+                    <div className={classes.workoutAnswer}>
+                        <button className={classes.buttonPrimary} onClick={() => displayWorkoutStructure()}>
+                            Add workout schedule
+                        </button>
+                        <div className={classes.workoutStructure}>
+                            {structDisplay}
+                        </div>
+                    </div>
+                </div>
+                <div className={classes.rowContainer4}>
+                    <span className={classes.question}>Name of your workout program</span>
+                    <span className={classes.answer}>
+                        <TextField
+                            style={{marginTop: '-16px', display: 'block', height: '15px'}}
+                            //style={{position: 'absolute', display: 'inline', width: '60px', height: '10px', float: 'right', fontSize: '16px', color: 'black'}}
+                            className={classes.textField}
+                            id={structCount}
+                            label="Name"
+                            variant="outlined"
+                            onChange = {(e) => setProgramName(e.target.value)}
+                        />
+                    </span>
+                </div>
+            </div>
+            <div className={classes.footer}>
+                <button className={classes.footerButton} onClick={() => setIsSecondModal(true)}>
+                    Next
+                </button>
             </div>
         </div>
-   </div>
+   </div>}
+   {isSecondModal && <CreateProgram2 toggle={toggle}/>}
+   </>
   );
 }
 
