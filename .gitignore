@@ -136,3 +136,4 @@ frontend/package.json
 frontend/package-lock.json
 
 backend/planfierce/workoutmanager/access.txt
+backend/planfierce/workoutmanager/service.json

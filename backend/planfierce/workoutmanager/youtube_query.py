@@ -6,11 +6,11 @@ import googleapiclient.errors
 from google.oauth2 import service_account
 
 import json
-from youtube_search import SearchParameter, Result, Video, VideoDuration
+from .youtube_search import SearchParameter, Result, Video, VideoDuration
 import isodate
 
 scopes = ["https://www.googleapis.com/auth/sqlservice.admin", "https://www.googleapis.com/auth/youtube.force-ssl", "https://www.googleapis.com/auth/youtube.readonly"]
-service_account_file = 'service.json'
+service_account_file = 'workoutmanager/service.json'
 
 class YoutubeQuery:
 
@@ -90,7 +90,8 @@ class YoutubeQuery:
             order="relevance",
             q=query,
             relevanceLanguage="en",
-            type="video"
+            type="video",
+            maxResults=20
         )
         response = request.execute()
 
@@ -130,7 +131,7 @@ class YoutubeQuery:
 # if __name__ == "__main__":
 #     yq = YoutubeQuery()
 #     sp = SearchParameter("arms", "Chloe Ting")
-
+#
 #     result = yq.runYoutubeSearchQuery(sp)
 #     for v in result.videos:
 #         print(v.title)

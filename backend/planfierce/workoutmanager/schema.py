@@ -3,6 +3,7 @@ from datetime import datetime
 from graphene_django import DjangoObjectType
 from .models import WorkoutVideo, WorkoutSeries, WorkoutDay
 from .workout_creator import WorkoutCreator
+from .calendar_manager import CalendarAdmin
 
 
 class WorkoutVideoType(DjangoObjectType):
@@ -83,6 +84,7 @@ class CreateWorkoutMutation(graphene.Mutation):
         creator = WorkoutCreator(name, start_date_d, end_date_d, days_of_week, start_time, warmup_durations,
                                  workout_durations, cooldown_durations, types, youtubers)
         workout = creator.create_workout()
+        CalendarAdmin().update_calendar(workout)
         return CreateWorkoutMutation(workout=workout)
 
 

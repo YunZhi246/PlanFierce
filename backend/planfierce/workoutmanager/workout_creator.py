@@ -1,6 +1,7 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from .models import WorkoutVideo, WorkoutSeries, WorkoutDay
 from .youtube_search import SearchParameter
+from .youtube_query import YoutubeQuery
 
 
 class WorkoutCreator:
@@ -27,9 +28,6 @@ class WorkoutCreator:
         self.types = types
         self.youtubers = youtubers
         self.end_time = self.__create_end_time()
-        # TODO: actually use start and end date (aka remove following lines)
-        self.start_date = date.today()
-        self.end_date = date.today() + timedelta(days=7)
 
     def create_workout(self):
         workout = WorkoutSeries()
@@ -39,17 +37,19 @@ class WorkoutCreator:
         workout.save()
 
         workout_days = self.__create_days(workout)
-        print(workout_days)
-
-        search_params = self.__process_searches()
-        print(search_params)
-        # TODO: search and process videos
-        # TODO: search for more videos if there isn't enough
-        # TODO: create videos, save videos
-        # TODO: distribute videos to each day
-
         for d in workout_days:
             d.save()
+
+        search_params = self.__process_searches()
+        query = YoutubeQuery()
+        results = query.runYoutubeSearchQueries(search_params)
+
+        warmup_r, workout_r, cooldown_r = self.__process_results(results)
+        warmup_map = self.__sort_videos(warmup_r, self.warmup_durations)
+        workout_map = self.__sort_videos(workout_r, self.workout_durations)
+        cooldown_map = self.__sort_videos(cooldown_r, self.cooldown_durations)
+
+        self.__add_videos(workout_days, warmup_map, workout_map, cooldown_map)
         return workout
 
     def __create_end_time(self):
@@ -98,3 +98,79 @@ class WorkoutCreator:
             for p in ppl:
                 search_params.append(SearchParameter(k, p))
         return search_params
+
+    @staticmethod
+    def __process_results(results):
+        warmup_results = []
+        workout_result = []
+        cooldown_results = []
+
+        for r in results:
+            if r.search_parameters.keyword == "warm up":
+                warmup_results.extend(r.videos)
+            elif r.search_parameters.keyword == "cool down":
+                cooldown_results.extend(r.videos)
+            else:
+                workout_result.extend(r.videos)
+        return warmup_results, workout_result, cooldown_results
+
+    def __sort_videos(self, videos, durations):
+        duration_map = {}
+        for d in durations:
+            duration_map[d] = []
+
+        for v in videos:
+            result, dur = self.__duration_matches(duration_map, v.duration)
+            if result:
+                duration_map[dur].append(v)
+
+        return duration_map
+
+    @staticmethod
+    def __duration_matches(target_map, check):
+        for i in range(check-5, check+6):
+            if i in target_map:
+                return True, i
+        return False, 0
+
+    def __add_videos(self, days, warmup_map, workout_map, cooldown_map):
+        index = 0
+        for day in days:
+            for dur in warmup_map.keys():
+                if not warmup_map[dur]:
+                    print("Could not find warmup of ", dur)
+                    continue
+                self.__add_video_to_day(day, warmup_map[dur][index % len(warmup_map[dur])], "warmup")
+            for dur in workout_map.keys():
+                if not workout_map[dur]:
+                    print("Could not find workout of ", dur)
+                    continue
+                self.__add_video_to_day(day, workout_map[dur][index % len(workout_map[dur])], "workout")
+            for dur in cooldown_map.keys():
+                if not cooldown_map[dur]:
+                    print("Could not find cooldown of ", dur)
+                    continue
+                self.__add_video_to_day(day, cooldown_map[dur][index % len(cooldown_map[dur])], "cooldown")
+            index += 1
+        return days
+
+    @staticmethod
+    def __add_video_to_day(day, video, type):
+        video_query = WorkoutVideo.objects.filter(youtube_id=video.youtube_id)
+        if len(video_query) == 0:
+            actual_video = WorkoutVideo()
+            actual_video.title = video.title
+            actual_video.youtuber = video.youtuber
+            actual_video.url = video.url
+            actual_video.youtube_id = video.youtube_id
+            actual_video.duration = time(minute=video.duration)
+            actual_video.save()
+        else:
+            actual_video = video_query[0]
+
+        if type == "warmup":
+            day.warmup_videos.add(actual_video)
+        elif type == "cooldown":
+            day.cooldown_videos.add(actual_video)
+        else:
+            day.videos.add(actual_video)
