@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import injectSheet from 'react-jss';
 import '../index.css';
-import { Redirect } from 'react-router-dom'
 
 import headerImage from '../Images/headerImage.jpg';
 import CreateProgram1 from '../Components/Popups/CreateProgram1';
@@ -9,6 +8,7 @@ import CreateProgram1 from '../Components/Popups/CreateProgram1';
 const STYLES = {
     imageHeader: {
         width: '100vw',
+        height: '50vh',
         boxShadow: 'rgba(204, 0, 255, 0.4)',
     },
     titleText: {
@@ -43,6 +43,8 @@ const STYLES = {
         fontSize: '18px',
         padding: '9px 15px 9px 15px',
         backgroundColor: '#592566',
+        marginTop: '12px',
+        marginBottom: '15px',
         color: 'white',
         border: '1px solid white',
     },
@@ -65,14 +67,19 @@ const STYLES = {
  
  
 */
-const HomePage = ({
+
+const CalendarPage = ({
     classes,
 }) => {
   // Declare a new state variable, which we'll call "count"
-  const [count, setCount] = useState(0);
   const [createProgram, setProgram] = useState(false);
-  const [calendar, setCalendar] = useState(false);
+  const iframeCalendar = '<iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23B39DDB&amp;ctz=America%2FToronto&amp;src=cGxhbmZpZXJjZUBnbWFpbC5jb20&amp;color=%23039BE5&amp;title=Your%20Workout%20Schedule" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
+  
   console.log("CreateProgram ", createProgram);
+
+  const calendar = () => {
+      return {__html: iframeCalendar}
+  }
 
   return (
     <div className={classes.mainContainer}>
@@ -81,23 +88,19 @@ const HomePage = ({
       <div className={classes.textContainer}>
         <div className={classes.textBox}>
             <div className={classes.titleText}>
-                Plan <i>FIERCE</i>
-                <div className={classes.subTitleText}>Your home workout planner</div>
-            </div>
-            <div className={classes.buttonContainer}>
-                <button className={classes.buttonPrimary} onClick={() => setProgram(!createProgram)}>
-                    Create Now
-                </button>
-                <button className={classes.buttonSecondary} onClick={() => setCalendar(true)}>
-                    Calendar
-                </button>
+                Plan <i>FIERCE!</i>
+                <div className={classes.subTitleText}>Your calendar</div>
             </div>
             {createProgram && <CreateProgram1 toggle={() => setProgram(!createProgram)}/>}
-            {calendar && <Redirect to="/calendar"/>}
         </div>
       </div>
+      <button className={classes.buttonPrimary} onClick={() => setProgram(!createProgram)}>
+        Create Now
+      </button>
+      <div dangerouslySetInnerHTML={calendar()}/>
     </div>
   );
 }
+
 export default injectSheet(STYLES)
-(HomePage);
+(CalendarPage);
