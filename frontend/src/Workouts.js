@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, gql } from '@apollo/client';
+import { Redirect } from 'react-router-dom';
 
 const QUERY_ALL_WORKOUTS = gql`
     query {
@@ -62,6 +63,7 @@ export function CreateWorkout(props) {
         onCompleted(response) {
             console.log("Workout Created!")
             console.log(response.createWorkout.workout);
+            setCalendar(true);
         }
     });
 
@@ -93,6 +95,8 @@ export function CreateWorkout(props) {
         return [warmups, workouts, cooldowns];
     };
 
+    const [calendar, setCalendar] = useState(false);
+
     const daysOfWeek = processDaysOfWeek(props.daysOfWeek);
     const [warmups, workouts, cooldowns] = processDurations(props.workoutStruct, props.workoutTimes);
 
@@ -112,6 +116,7 @@ export function CreateWorkout(props) {
                 youtubers: props.youtubers
             }
         });
+        // setCalendar(true);
     };
 
     return (
@@ -119,6 +124,7 @@ export function CreateWorkout(props) {
             <button className={props.class} onClick={() => handleSubmit()}>
                 Submit
             </button>
+            {calendar && <Redirect to="/calendar"/>}
             {mutationLoading && <p>Loading...</p>}
             {mutationError && <p>Error :( Please try again</p>}
         </div>
