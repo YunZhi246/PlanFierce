@@ -2,11 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import HomePage from './App';
+import CalendarPage from './Pages/CalendarPage';
+import VideoPage from './Pages/VideoPage';
+
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+
+const routing = (
+  <Router>
+    <div>
+      <Route exact path="/" component={HomePage} />
+      <Route path="/calendar" component={CalendarPage} />
+      <Route path="/videos" component={VideoPage} />
+    </div>
+  </Router>
+)
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  routing,
   document.getElementById('root')
 );
 

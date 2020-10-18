@@ -166,7 +166,7 @@ const CreateProgram2 = (props) => {
                     </span>
                 </div>
                 <div className={classes.rowContainer}>
-                    <span className={classes.question}>Which days of the week do you plan on working out?</span>
+                    <span className={classes.question}>Enter in any YouTube links you’d like us to include in your program</span>
                         <ChipInput
                             style={{marginTop: '-10px', maxWidth: '350px', float: 'right'}}
                             onChange={(chips) => setYoutubers(chips)}
