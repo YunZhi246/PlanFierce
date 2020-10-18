@@ -1,7 +1,7 @@
 import graphene
-import datetime
 from graphene_django import DjangoObjectType
 from .models import WorkoutVideo, WorkoutSeries, WorkoutDay
+from .workout_creator import WorkoutCreator
 
 
 class WorkoutVideoType(DjangoObjectType):
@@ -32,7 +32,6 @@ class Query(graphene.ObjectType):
     all_days = graphene.List(WorkoutDayType)
     all_series = graphene.List(WorkoutSeriesType)
 
-
     def resolve_all_videos(root, info):
         return WorkoutVideo.objects.all()
 
@@ -46,6 +45,7 @@ class Query(graphene.ObjectType):
 class CreateWorkoutMutation(graphene.Mutation):
     class Arguments:
         name = graphene.String(required=True)
+        # TODO: require the start and end date
         start_date = graphene.Date()  # required
         end_date = graphene.Date()  # required
         days_of_week = graphene.List(graphene.String, required=True)
@@ -66,23 +66,9 @@ class CreateWorkoutMutation(graphene.Mutation):
         cooldown_durations = kwargs.get('cooldown_durations', [])
         youtubers = kwargs.get('youtubers', [])
         types = kwargs.get('types', [])
-        workout = WorkoutSeries()
-        workout.name = name
-        print(start_date)
-        print(end_date)
-        workout.start_date = datetime.date.today()
-        workout.end_date = datetime.date.today() + datetime.timedelta(days=7)
-        # TODO: require the date and actually process it
-        print(days_of_week)
-        print(start_time)
-        # TODO: process days of week and create how many days to make (and their date)
-        print(warmup_durations)
-        print(cooldown_durations)
-        print(workout_durations)
-        print(types)
-        print(youtubers)
-        # TODO: search for videos
-        # TODO: save workout
+        creator = WorkoutCreator(name, start_date, end_date, days_of_week, start_time, warmup_durations,
+                                 workout_durations, cooldown_durations, types, youtubers)
+        workout = creator.create_workout()
         return CreateWorkoutMutation(workout=workout)
 
 

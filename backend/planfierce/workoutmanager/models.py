@@ -7,6 +7,7 @@ class WorkoutVideo(models.Model):
     youtuber = models.CharField(max_length=100)
     duration = models.DurationField()
     release_date = models.DateField()
+    youtube_id = models.CharField(max_length=50)
 
     def __str__(self):
         return self.title
