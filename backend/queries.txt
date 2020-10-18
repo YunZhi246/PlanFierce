@@ -37,7 +37,15 @@ query {
       date
       startTime
       endTime
+      warmupVideos {
+        id
+        url
+      }
       videos {
+        id
+        url
+      }
+      cooldownVideos {
         id
         url
       }
