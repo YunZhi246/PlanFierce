@@ -17,7 +17,7 @@ class WorkoutVideoType(DjangoObjectType):
 class WorkoutSeriesType(DjangoObjectType):
     class Meta:
         model = WorkoutSeries
-        fields = ("id", "name", "start_date", "end_date", "days")
+        fields = "__all__"
 
 
 class WorkoutDayType(DjangoObjectType):
