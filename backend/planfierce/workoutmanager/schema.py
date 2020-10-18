@@ -1,4 +1,5 @@
 import graphene
+import datetime
 from graphene_django import DjangoObjectType
 from .models import WorkoutVideo, WorkoutSeries, WorkoutDay
 
@@ -31,6 +32,7 @@ class Query(graphene.ObjectType):
     all_days = graphene.List(WorkoutDayType)
     all_series = graphene.List(WorkoutSeriesType)
 
+
     def resolve_all_videos(root, info):
         return WorkoutVideo.objects.all()
 
@@ -41,4 +43,51 @@ class Query(graphene.ObjectType):
         return WorkoutSeries.objects.all()
 
 
-schema = graphene.Schema(query=Query)
+class CreateWorkoutMutation(graphene.Mutation):
+    class Arguments:
+        name = graphene.String(required=True)
+        start_date = graphene.Date()  # required
+        end_date = graphene.Date()  # required
+        days_of_week = graphene.List(graphene.String, required=True)
+        start_time = graphene.Time(required=True)
+        warmup_durations = graphene.List(graphene.Int)
+        workout_durations = graphene.List(graphene.Int)
+        cooldown_durations = graphene.List(graphene.Int)
+        types = graphene.List(graphene.String)
+        youtubers = graphene.List(graphene.String)
+
+    workout = graphene.Field(WorkoutSeriesType)
+
+    def mutate(self, info, name, days_of_week, start_time, **kwargs):
+        start_date = kwargs.get('start_date', None)
+        end_date = kwargs.get('end_date', None)
+        warmup_durations = kwargs.get('warmup_durations', [])
+        workout_durations = kwargs.get('workout_durations', [])
+        cooldown_durations = kwargs.get('cooldown_durations', [])
+        youtubers = kwargs.get('youtubers', [])
+        types = kwargs.get('types', [])
+        workout = WorkoutSeries()
+        workout.name = name
+        print(start_date)
+        print(end_date)
+        workout.start_date = datetime.date.today()
+        workout.end_date = datetime.date.today() + datetime.timedelta(days=7)
+        # TODO: require the date and actually process it
+        print(days_of_week)
+        print(start_time)
+        # TODO: process days of week and create how many days to make (and their date)
+        print(warmup_durations)
+        print(cooldown_durations)
+        print(workout_durations)
+        print(types)
+        print(youtubers)
+        # TODO: search for videos
+        # TODO: save workout
+        return CreateWorkoutMutation(workout=workout)
+
+
+class Mutation(graphene.ObjectType):
+    create_workout = CreateWorkoutMutation.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
