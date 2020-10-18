@@ -53,3 +53,30 @@ query {
   }
 }
 
+query {
+  dayById(dayId: 1) {
+    id
+    date
+    startTime
+    endTime
+    sharedWith
+    videos {
+      id
+    }
+  }
+}
+
+query {
+  seriesById(workoutId: 1) {
+    id
+    name
+    startDate
+    endDate
+    days {
+      id
+      date
+      startTime
+      endTime
+    }
+  }
+}
