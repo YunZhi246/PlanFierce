@@ -4,7 +4,6 @@ import '../index.css';
 
 import headerImage from '../Images/headerImage.jpg';
 import CreateProgram1 from '../Components/Popups/CreateProgram1';
-import { GetAllDays } from '../Days.js';
 
 const STYLES = {
     imageHeader: {
@@ -72,8 +71,6 @@ const HomePage = ({
   const [count, setCount] = useState(0);
   const [createProgram, setProgram] = useState(false);
   console.log("CreateProgram ", createProgram);
-
-  GetAllDays();
 
   return (
     <div className={classes.mainContainer}>

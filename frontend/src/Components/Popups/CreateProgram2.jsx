@@ -6,6 +6,8 @@ import { Select, MenuItem, InputLabel, Input, FormControl, Chip } from '@materia
 import ClearIcon from '@material-ui/icons/Clear';
 import ChipInput from 'material-ui-chip-input';
 import 'react-datepicker/dist/react-datepicker.css';
+import { CreateWorkout } from '../../Workouts.js';
+
 
 const STYLES = {
     modal: {
@@ -173,9 +175,9 @@ const CreateProgram2 = ({
                 </div>
             </div>
             <div className={classes.footer}>
-                <button className={classes.footerButton} onClick={() => console.log('SUBMIT TIME')}>
-                    Submit
-                </button>
+                <CreateWorkout
+                    class={classes.footerButton}
+                />
             </div>
         </div>
    </div>
