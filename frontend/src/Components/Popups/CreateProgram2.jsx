@@ -6,6 +6,8 @@ import { Select, MenuItem, InputLabel, Input, FormControl, Chip } from '@materia
 import ClearIcon from '@material-ui/icons/Clear';
 import ChipInput from 'material-ui-chip-input';
 import 'react-datepicker/dist/react-datepicker.css';
+import { CreateWorkout } from '../../Workouts.js';
+
 
 const STYLES = {
     modal: {
@@ -116,10 +118,9 @@ const workoutTypesList = [
     'HIIT',
 ];
 
-const CreateProgram2 = ({
-    classes,
-    toggle,
-}) => {
+const CreateProgram2 = (props) => {
+  const classes = props.classes
+  const toggle = props.toggle
   const [workoutTypes, setWorkoutTypes] = useState([]);
   const [youtubers, setYoutubers] = useState([]);
 
@@ -173,9 +174,18 @@ const CreateProgram2 = ({
                 </div>
             </div>
             <div className={classes.footer}>
-                <button className={classes.footerButton} onClick={() => console.log('SUBMIT TIME')}>
-                    Submit
-                </button>
+                <CreateWorkout
+                    class={classes.footerButton}
+                    name={props.name}
+                    startDate={props.startDate}
+                    endDate={props.endDate}
+                    startTime={props.startTime}
+                    daysOfWeek={props.daysOfWeek}
+                    workoutStruct={props.workoutStruct}
+                    workoutTimes={props.workoutTimes}
+                    types={workoutTypes}
+                    youtubers={youtubers}
+                />
             </div>
         </div>
    </div>

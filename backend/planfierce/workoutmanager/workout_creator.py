@@ -70,15 +70,10 @@ class WorkoutCreator:
         return end.time()
 
     def __create_days(self, workout):
-        int_days = {}
-        for d in self.days_of_week:
-            if d in self.date_to_int_map:
-                int_days[self.date_to_int_map[d]] = True
-
         workout_days = []
         date_counter = self.start_date
         while date_counter <= self.end_date:
-            if date_counter.weekday() in int_days:
+            if date_counter.weekday() in self.days_of_week:
                 day = WorkoutDay()
                 day.workout_series = workout
                 day.date = date_counter

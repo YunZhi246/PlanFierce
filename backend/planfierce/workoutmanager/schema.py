@@ -1,4 +1,5 @@
 import graphene
+from datetime import datetime
 from graphene_django import DjangoObjectType
 from .models import WorkoutVideo, WorkoutSeries, WorkoutDay
 from .workout_creator import WorkoutCreator
@@ -59,10 +60,9 @@ class Query(graphene.ObjectType):
 class CreateWorkoutMutation(graphene.Mutation):
     class Arguments:
         name = graphene.String(required=True)
-        # TODO: require the start and end date
-        start_date = graphene.Date()  # required
-        end_date = graphene.Date()  # required
-        days_of_week = graphene.List(graphene.String, required=True)
+        start_date = graphene.String(required=True)
+        end_date = graphene.String(required=True)
+        days_of_week = graphene.List(graphene.Int, required=True)
         start_time = graphene.Time(required=True)
         warmup_durations = graphene.List(graphene.Int)
         workout_durations = graphene.List(graphene.Int)
@@ -72,15 +72,15 @@ class CreateWorkoutMutation(graphene.Mutation):
 
     workout = graphene.Field(WorkoutSeriesType)
 
-    def mutate(self, info, name, days_of_week, start_time, **kwargs):
-        start_date = kwargs.get('start_date', None)
-        end_date = kwargs.get('end_date', None)
+    def mutate(self, info, name, start_date, end_date, days_of_week, start_time, **kwargs):
+        start_date_d = datetime.strptime(start_date, '%Y-%m-%dT%H:%M:%S.%fZ').date()
+        end_date_d = datetime.strptime(end_date, '%Y-%m-%dT%H:%M:%S.%fZ').date()
         warmup_durations = kwargs.get('warmup_durations', [])
         workout_durations = kwargs.get('workout_durations', [])
         cooldown_durations = kwargs.get('cooldown_durations', [])
         youtubers = kwargs.get('youtubers', [])
         types = kwargs.get('types', [])
-        creator = WorkoutCreator(name, start_date, end_date, days_of_week, start_time, warmup_durations,
+        creator = WorkoutCreator(name, start_date_d, end_date_d, days_of_week, start_time, warmup_durations,
                                  workout_durations, cooldown_durations, types, youtubers)
         workout = creator.create_workout()
         return CreateWorkoutMutation(workout=workout)
