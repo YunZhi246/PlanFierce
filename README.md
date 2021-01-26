@@ -40,7 +40,7 @@ python -m pip install virtualenv
 python -m virtualenv --version
 python -m virtualenv venv
 ```
-To activate (on Windows): `.\venv\Scripts\activate`  
+To activate (on Windows): `.\venv\Scripts\activate` or `source '.\venv\Scripts\activate'`
 To activate (on Mac): `source venv/bin/activate`  
 Deactivate: `deactivate`
 
